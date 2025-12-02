@@ -13,6 +13,7 @@ RTSP_URL = os.getenv("RTSP_URL")
 RTMP_URL = os.getenv("RTMP_URL")
 INITIAL_RETRY_DELAY = int(os.getenv("RETRY_INITIAL", 5))
 MAX_RETRY_DELAY = int(os.getenv("RETRY_MAX", 60))
+LOG_FILE = os.getenv("LOG_FILE", "ffmpeg_stream.log")
 
 if not RTSP_URL or not RTMP_URL:
     raise ValueError("RTSP_URL and RTMP_URL must be defined in .env file")
@@ -34,20 +35,22 @@ def parse_host_port(url, default_port):
     return host, default_port
 
 def start_ffmpeg():
-    """Start ffmpeg process"""
+    """Start FFmpeg process with proper flags and logging"""
     return subprocess.Popen([
         "ffmpeg",
         "-reconnect", "1",
         "-reconnect_streamed", "1",
         "-reconnect_delay_max", "5",
         "-rtsp_transport", "tcp",
+        "-use_wallclock_as_timestamps", "1",
+        "-fflags", "+genpts",
         "-i", RTSP_URL,
         "-c:v", "copy",
         "-c:a", "aac",
         "-f", "flv",
         RTMP_URL,
         "-loglevel", "error"
-    ])
+    ], stdout=open(LOG_FILE, "a"), stderr=subprocess.STDOUT)
 
 def stream_forever():
     retry_delay = INITIAL_RETRY_DELAY
