@@ -10,7 +10,7 @@ SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 echo "=== Installing dependencies ==="
 sudo apt update
 sudo apt install -y ffmpeg python3 python3-pip
-pip3 install python-dotenv
+pip3 install python-dotenv --break-system-packages
 
 echo "=== Creating directory at $BASE_DIR ==="
 mkdir -p $BASE_DIR
