@@ -1,0 +1,4 @@
+RTSP_URL=rtsp://192.168.1.10:554/stream1
+RTMP_URL=rtmp://your-rtmp-server/live/camera1
+RETRY_INITIAL=5
+RETRY_MAX=60

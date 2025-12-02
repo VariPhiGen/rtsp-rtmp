@@ -1,0 +1,2 @@
+chmod +x setup_rtsp_rtmp.sh
+./setup_rtsp_rtmp.sh
